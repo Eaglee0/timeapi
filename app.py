@@ -1,16 +1,22 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_cors import cross_origin
 
 app = Flask(__name__)
-
 import json
 from apis import time_api
+
 api_j = json.dumps(time_api)
+
 
 @app.route('/')
 def index_p():
     return render_template('index.html')
 
+@app.route('/listapis')
+@cross_origin()
+def listapis():
+    from apis import final_apislist
+    return jsonify(final_apislist)
 @app.route('/time', methods = ['POST', 'GET'])
 @cross_origin()
 def apitime():
@@ -18,4 +24,4 @@ def apitime():
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
-    app.run(port=5000)
+    app.run(port=5000,debug=True)
